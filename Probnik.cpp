@@ -1,72 +1,128 @@
-#include <stdio.h>        //ОНО ДАЖЕ РАБОТАЕТ!!! :)
-#include <math.h>         //и без ошибок... вроде...
+#include <stdio.h>
+#include <math.h>
 
-#define EPS 1e-9 //эпсилон
+const double EPS = 1e-9;
 
 void QuadraticEquation(double a, double b, double c, double* x1, double* x2);
+bool CompareEpsilon(double x);
 bool CheckLinearEquation(double a);
 void CountingRoot(double b, double c, double* x1);
 double Discriminant(double a, double b, double c);
 void CountingRoots(double a, double b, double discrim, double* x1, double* x2);
 
-int main(){
-    double a; //коэффициент перед х^2
-    double b; //коэффициент перед х
-    double c; //свободный коэффициент
-    double x1; //первый корень
-    double x2; //второй корень
+int main()
+{
+    double a = 0;
+    double b = 0;
+    double c = 0;
+    double x1 = 0;
+    double x2 = 0;
+
     scanf("%lf", &a);
     scanf("%lf", &b);
     scanf("%lf", &c);
+
     QuadraticEquation(a, b, c, &x1, &x2);
+
     return 0;
 }
 
-void QuadraticEquation(double a, double b, double c, double* x1, double* x2){
-    if (CheckLinearEquation(a)){
+void QuadraticEquation(double a, double b, double c, double* x1, double* x2)
+{
+    if (CheckLinearEquation(a))
+    {
         CountingRoot(b, c, x1);
     }
-    else{
+
+    else
+    {
         double discrim = Discriminant(a, b, c);
+
         CountingRoots(a, b, discrim, x1, x2);
     }
+
 }
 
-bool CheckLinearEquation(double a){
-    if (fabs(a) < EPS) return 1;
-    else return 0;
+bool CompareEpsilon(double x)
+{
+    return fabs(x) < EPS;
 }
 
-void CountingRoot(double b, double c, double* x1){
-    if (fabs(b) < EPS) {
-        if (fabs(c) < EPS) printf("x = any real");
-        else printf("no roots");
+bool CheckLinearEquation(double a)
+{
+    return CompareEpsilon(a);
+}
+
+void CountingRoot(double b, double c, double* x1)
+{
+    if (CompareEpsilon(b))
+    {
+        if (CompareEpsilon(c))
+        {
+            printf("x = any real");
+        }
+
+        else
+        {
+            printf("no roots");
+        }
+
         return;
     }
-    else *x1 = -c/b;
-    if (fabs(*x1) < EPS) *x1 = fabs(*x1);
+
+    else
+    {
+        *x1 = -c/b;
+
+        if (CompareEpsilon(*x1))
+        {
+            *x1 = fabs(*x1);
+        }
+
+    }
+
     printf("x = %.8lf", *x1);
 }
 
-double Discriminant(double a, double b, double c){
+double Discriminant(double a, double b, double c)
+{
     return b*b-4*a*c;
 }
 
-void CountingRoots(double a, double b, double discrim, double* x1, double* x2){
-    if (discrim < 0) {
+void CountingRoots(double a, double b, double discrim, double* x1, double* x2)
+{
+    if (discrim < 0)
+    {
         printf("no roots");
+
         return;
     }
-    if (discrim < EPS) {
+
+    if (discrim < EPS)
+    {
         *x1 = -b/(2*a);
-        if (fabs(*x1) < EPS) *x1 = fabs(*x1);
+
+        if (CompareEpsilon(*x1))
+        {
+            *x1 = fabs(*x1);
+        }
+
         printf("x = %.8lf", *x1);
+
         return;
     }
+
     *x1 = (-b-sqrt(discrim))/(2*a);
     *x2 = (-b+sqrt(discrim))/(2*a);
-    if (fabs(*x1) < EPS) *x1 = fabs(*x1);
-    if (fabs(*x2) < EPS) *x2 = fabs(*x2);
+
+    if (CompareEpsilon(*x1))
+    {
+        *x1 = fabs(*x1);
+    }
+    if (CompareEpsilon(*x2))
+    {
+        *x2 = fabs(*x2);
+    }
+
     printf("x = %.8lf\nx = %.8lf", *x1, *x2);
 }
-
