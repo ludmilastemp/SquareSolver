@@ -10,12 +10,12 @@ struct Coeffs
     double c;
 };
 
-void QuadraticEquation(const struct Coeffs coeffs);
+void QuadraticEquation(const struct Coeffs* coeffs);
 bool CompareEpsilon(double x);
 bool CheckLinearEquation(double x);
-void CountingRoot(const struct Coeffs coeffs);
-double Discriminant(const struct Coeffs coeffs);
-void CountingRoots(const struct Coeffs coeffs, double discrim);
+void CountingRoot(const struct Coeffs* coeffs);
+double Discriminant(const struct Coeffs* coeffs);
+void CountingRoots(const struct Coeffs* coeffs, double discrim);
 
 int main()
 {
@@ -25,15 +25,14 @@ int main()
     scanf("%lf", &coeffs.b);
     scanf("%lf", &coeffs.c);
 
-    QuadraticEquation(coeffs);
+    QuadraticEquation(&coeffs);
 
     return 0;
 }
 
-void QuadraticEquation(const struct Coeffs coeffs)
+void QuadraticEquation(const struct Coeffs* coeffs)
 {
-
-    if (CheckLinearEquation(coeffs.a))
+    if (CheckLinearEquation(coeffs->a))
     {
         CountingRoot(coeffs);
     }
@@ -56,11 +55,11 @@ bool CheckLinearEquation(double a)
     return CompareEpsilon(a);
 }
 
-void CountingRoot(const struct Coeffs coeffs)
+void CountingRoot(const struct Coeffs* coeffs)
 {
-    if (CompareEpsilon(coeffs.b))
+    if (CompareEpsilon(coeffs->b))
     {
-        if (CompareEpsilon(coeffs.c))
+        if (CompareEpsilon(coeffs->c))
         {
             printf("x = any real");
         }
@@ -73,7 +72,7 @@ void CountingRoot(const struct Coeffs coeffs)
 
     else
     {
-        double x1 = - coeffs.c / coeffs.b;
+        double x1 = - coeffs->c / coeffs->b;
 
         if (CompareEpsilon(x1))
         {
@@ -84,12 +83,12 @@ void CountingRoot(const struct Coeffs coeffs)
     }
 }
 
-double Discriminant(const struct Coeffs coeffs)
+double Discriminant(const struct Coeffs* coeffs)
 {
-    return coeffs.b * coeffs.b - 4 * coeffs.a * coeffs.c;
+    return coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c;
 }
 
-void CountingRoots(const struct Coeffs coeffs, double discrim)
+void CountingRoots(const struct Coeffs* coeffs, double discrim)
 {
     if (discrim < 0)
     {
@@ -100,7 +99,7 @@ void CountingRoots(const struct Coeffs coeffs, double discrim)
 
     if (discrim < EPS)
     {
-        double x1 = - coeffs.b / (2 * coeffs.a);
+        double x1 = - coeffs->b / (2 * coeffs->a);
 
         if (CompareEpsilon(x1))
         {
@@ -112,8 +111,8 @@ void CountingRoots(const struct Coeffs coeffs, double discrim)
         return;
     }
 
-    double x1 = (- coeffs.b - sqrt(discrim)) / (2 * coeffs.a);
-    double x2 = (- coeffs.b + sqrt(discrim)) / (2 * coeffs.a);
+    double x1 = (- coeffs->b - sqrt(discrim)) / (2 * coeffs->a);
+    double x2 = (- coeffs->b + sqrt(discrim)) / (2 * coeffs->a);
 
     if (CompareEpsilon(x1))
     {
