@@ -1,127 +1,164 @@
 #include <stdio.h>
-#include <math.h>
+#include <math.h>                            // never nester
+#include <assert.h>
 
-const double EPS = 1e-9;
+enum RootsCount
+{
+    ZERO,
+    ONE,
+    TWO,
+    INFINI
+};
 
 struct Coeffs
 {
-    double a;
-    double b;
-    double c;
+    double a = 0;
+    double b = 0;
+    double c = 0;
 };
 
-void QuadraticEquation(const struct Coeffs* coeffs);
-bool CompareEpsilon(double x);
-bool CheckLinearEquation(double x);
-void CountingRoot(const struct Coeffs* coeffs);
-double Discriminant(const struct Coeffs* coeffs);
-void CountingRoots(const struct Coeffs* coeffs, double discrim);
+struct Roots
+{
+    double x1 = 0, x2 = 0;
+    RootsCount count_roots = ZERO;
+};
+
+void ScanCoeffs(struct Coeffs* coeffs);
+void CheckScan(double x);
+void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots);
+bool CompareZero(double x);
+void SolveLinearEquation(const struct Coeffs* coeffs, struct Roots* roots);
+void PrintRoots(const struct Roots* roots);
 
 int main()
 {
-    struct Coeffs coeffs = { 0 };
+    struct Coeffs coeffs = { };
+    struct Roots roots = { };
 
-    scanf("%lf", &coeffs.a);
-    scanf("%lf", &coeffs.b);
-    scanf("%lf", &coeffs.c);
-
-    QuadraticEquation(&coeffs);
+    ScanCoeffs(&coeffs);
+    SolveQuadraticEquation(&coeffs, &roots);
+    PrintRoots(&roots);
 
     return 0;
 }
 
-void QuadraticEquation(const struct Coeffs* coeffs)
+void ScanCoeffs(struct Coeffs* coeffs)
 {
-    if (CheckLinearEquation(coeffs->a))
-    {
-        CountingRoot(coeffs);
-    }
+    scanf("%lf", &coeffs->a);     // cppref scanf Return
+    scanf("%lf", &coeffs->b);
+    scanf("%lf", &coeffs->c);
 
-    else
-    {
-        double discrim = Discriminant(coeffs);
-
-        CountingRoots(coeffs, discrim);
-    }
+    CheckScan(coeffs->a);
+    CheckScan(coeffs->b);
+    CheckScan(coeffs->c);
 }
 
-bool CompareEpsilon(double x)
+void CheckScan(double x)
 {
+    assert (isfinite (x)); //
+}
+
+bool CompareZero(double x) //
+{
+    const double EPS = 1e-9;
     return fabs(x) < EPS;
 }
 
-bool CheckLinearEquation(double a)
+void
+SolveQuadraticEquation(const struct Coeffs* coeffs, //
+                       struct Roots* roots)         // [out] afadfasdfasdasdfasdf
 {
-    return CompareEpsilon(a);
-}
-
-void CountingRoot(const struct Coeffs* coeffs)
-{
-    if (CompareEpsilon(coeffs->b))
+    if (CompareZero(coeffs->a))
     {
-        if (CompareEpsilon(coeffs->c))
-        {
-            printf("x = any real");
-        }
-
-        else
-        {
-            printf("no roots");
-        }
+        SolveLinearEquation(coeffs, roots);
     }
-
     else
     {
-        double x1 = - coeffs->c / coeffs->b;
+        double discrim = coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c;
 
-        if (CompareEpsilon(x1))
+        if (CompareZero(discrim))
         {
-            x1 = fabs(x1);
+            roots->count_roots = ONE;
+
+            roots->x1 = -coeffs->b / (2 * coeffs->a);
+
+            if (CompareZero(roots->x1))
+            {
+                roots->x1 = fabs(roots->x1);
+            }
+
+            return;
         }
 
-        printf("x = %.8lf", x1);
+        if (discrim < 0)
+        {
+            roots->count_roots = ZERO;
+
+            return;
+        }
+
+        roots->count_roots = TWO;
+
+        double sqrt_discrim = sqrt(discrim);
+
+        roots->x1 = (-coeffs->b - sqrt_discrim) / (2 * coeffs->a);
+        roots->x2 = (-coeffs->b + sqrt_discrim) / (2 * coeffs->a);
+
+        if (CompareZero(roots->x1))
+        {
+            roots->x1 = fabs(roots->x1);
+        }
+        if (CompareZero(roots->x2))
+        {
+            roots->x2 = fabs(roots->x2);
+        }
     }
 }
 
-double Discriminant(const struct Coeffs* coeffs)
+void SolveLinearEquation(const struct Coeffs* coeffs, struct Roots* roots)
 {
-    return coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c;
+    if (CompareZero(coeffs->b))
+    {
+        if (CompareZero(coeffs->c))
+        {
+            roots->count_roots = INFINI;
+        }
+        else
+        {
+            roots->count_roots = ZERO;
+        }
+    }
+    else
+    {
+        roots->count_roots = ONE;
+        roots->x1 = - coeffs->c / coeffs->b;
+
+        if (CompareZero(roots->x1))
+        {
+            roots->x1 = fabs(roots->x1);
+        }
+    }
 }
 
-void CountingRoots(const struct Coeffs* coeffs, double discrim)
+void PrintRoots(const struct Roots* roots)
 {
-    if (discrim < 0)
+    switch (roots->count_roots)
     {
-        printf("no roots");
-
-        return;
+        case ZERO:
+            printf("no roots");
+            break;
+        case ONE:
+            printf("x = %f\n", roots->x1);
+            break;
+        case TWO:
+            printf("x = %f\n", roots->x1);
+            printf("x = %f\n", roots->x2);
+            break;
+        case INFINI:
+            printf("x = any real");
+            break;
+        default:
+            printf("хрень");
+            break;
     }
-
-    if (discrim < EPS)
-    {
-        double x1 = - coeffs->b / (2 * coeffs->a);
-
-        if (CompareEpsilon(x1))
-        {
-            x1 = fabs(x1);
-        }
-
-        printf("x = %.8lf", x1);
-
-        return;
-    }
-
-    double x1 = (- coeffs->b - sqrt(discrim)) / (2 * coeffs->a);
-    double x2 = (- coeffs->b + sqrt(discrim)) / (2 * coeffs->a);
-
-    if (CompareEpsilon(x1))
-    {
-        x1 = fabs(x1);
-    }
-    if (CompareEpsilon(x2))
-    {
-        x2 = fabs(x2);
-    }
-
-    printf("x = %.8lf\nx = %.8lf", x1, x2);
 }
