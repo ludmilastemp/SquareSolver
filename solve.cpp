@@ -1,12 +1,6 @@
 #include <math.h>
-//#include "solve.h"
-#include "header.h"
 
-void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots);
-
-
-bool CompareZero(double x);
-void SolveLinearEquation(const struct Coeffs* coeffs, struct Roots* roots);
+#include "solve.h"
 
 bool CompareZero(double x)
 {
@@ -26,7 +20,7 @@ void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots)
 
         if (CompareZero(discrim))
         {
-            roots->count_roots = ONE;
+            roots->count_roots = ROOTS_ONE;
 
             roots->x1 = -coeffs->b / (2 * coeffs->a);
 
@@ -40,12 +34,12 @@ void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots)
 
         if (discrim < 0)
         {
-            roots->count_roots = ZERO;
+            roots->count_roots = ROOTS_ZERO;
 
             return;
         }
 
-        roots->count_roots = TWO;
+        roots->count_roots = ROOTS_TWO;
 
         double sqrt_discrim = sqrt(discrim);
 
@@ -69,16 +63,16 @@ void SolveLinearEquation(const struct Coeffs* coeffs, struct Roots* roots)
     {
         if (CompareZero(coeffs->c))
         {
-            roots->count_roots = INFINI;
+            roots->count_roots = ROOTS_INFINI;
         }
         else
         {
-            roots->count_roots = ZERO;
+            roots->count_roots = ROOTS_ZERO;
         }
     }
     else
     {
-        roots->count_roots = ONE;
+        roots->count_roots = ROOTS_ONE;
         roots->x1 = - coeffs->c / coeffs->b;
 
         if (CompareZero(roots->x1))

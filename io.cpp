@@ -2,35 +2,47 @@
 #include <math.h>
 #include <assert.h>
 
-#include "header.h"
+#include "solve.h"
 #include "io.h"
 
-//void ScanCoeff(double* x);
-//void PrintRoots(const struct Roots* roots);
-
-void ScanCoeff(double* x)
+ScanReturn ScanCoeff(struct Coeffs* coeffs)
 {
-    scanf("%lf", x);
 
-    //12dfs //cppref
-    assert (isfinite (*x));
+    //NULL
+    //__FILE__ __LINE__
+
+    int n_vars_entered = 0;
+    n_vars_entered = scanf("%lg%lg%lg", &coeffs->a, &coeffs->b, &coeffs->c);
+
+    int rest_line = getchar();
+
+    if (n_vars_entered == EOF) return TERMIN;
+    if (rest_line == '\n') return OK;
+
+    printf("The coefficients are entered incorrectly! Try again\n");
+    while (rest_line != '\n')
+    {
+        rest_line = getchar();
+    }
+
+    return UNCOR;
 }
 
 void PrintRoots(const struct Roots* roots)
 {
     switch (roots->count_roots)
     {
-        case ZERO:
+        case ROOTS_ZERO:
             printf("no roots");
             break;
-        case ONE:
-            printf("x = %f\n", roots->x1);
+        case ROOTS_ONE:
+            printf("x = %.6lf\n", roots->x1);
             break;
-        case TWO:
-            printf("x = %f\n", roots->x1);
-            printf("x = %f\n", roots->x2);
+        case ROOTS_TWO:
+            printf("x = %.6lf\n", roots->x1);
+            printf("x = %.6lf\n", roots->x2);
             break;
-        case INFINI:
+        case ROOTS_INFINI:
             printf("x = any real");
             break;
         default:
