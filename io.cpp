@@ -2,8 +2,12 @@
 #include <math.h>
 #include <assert.h>
 
-#include "solve.h"
 #include "io.h"
+#include "print_equation.h"
+#include "struct.h"
+
+#define GREEN             "\033[102;1m"
+#define CLEANER           "\033[0m"
 
 ScanReturn ScanCoeff(struct Coeffs* coeffs)
 {
@@ -13,11 +17,15 @@ ScanReturn ScanCoeff(struct Coeffs* coeffs)
 
     int restOfLine = getchar();
 
-    if (nVarsEntered == 3   && restOfLine == '\n')  return OK;
-    if (nVarsEntered == EOF || restOfLine == EOF)
+    if (nVarsEntered == 3     && restOfLine == '\n')
     {
-        printf("The coefficients are entered incorrectly!\n");
-        return TERMINATE;
+        PrintEquation(coeffs);
+        return SCAN_CORRECT;
+    }
+    if (nVarsEntered == EOF   || restOfLine == EOF)
+    {
+        printf("The meowfficients are entered incorrectly!\n");
+        return SCAN_TERMINATE;
     }
 
     while (restOfLine != '\n' && restOfLine != EOF)
@@ -27,16 +35,15 @@ ScanReturn ScanCoeff(struct Coeffs* coeffs)
 
     if (restOfLine == '\n')
     {
-        printf("The coefficients are entered incorrectly! Try again\n");
-
+        printf("The meowfficients are entered incorrectly! Try again\n");
     }
     else
     {
-        printf("The coefficients are entered incorrectly!\n");
-        return TERMINATE;
+        printf("The meowfficients are entered incorrectly!\n");
+        return SCAN_TERMINATE;
     }
 
-    return UNCOR;
+    return SCAN_INCORRECT;
 }
 
 void PrintRoots(const struct Roots* roots)
@@ -46,20 +53,20 @@ void PrintRoots(const struct Roots* roots)
     switch (roots->rootsCount)
     {
         case ROOTS_ZERO:
-            printf("no roots\n");
+            printf(GREEN "\n\t\tno roots" CLEANER);
             break;
         case ROOTS_ONE:
-            printf("x = %.6g\n", roots->x1);
+            printf(GREEN "\n\t\tx = %.6g" CLEANER, roots->x1);
             break;
         case ROOTS_TWO:
-            printf("x = %.6g\n", roots->x1);
-            printf("x = %.6g\n", roots->x2);
+            printf(GREEN "\n\t\tx = %.6g" CLEANER, roots->x1);
+            printf(GREEN "\n\t\tx = %.6g" CLEANER,   roots->x2);
             break;
         case ROOTS_INFINIK:
-            printf("x = any real number\n");
+            printf(GREEN "\n\t\tx = any real number" CLEANER);
             break;
         default:
-            printf("Invalid error! rootsCount = %d\n", roots->rootsCount);
+            printf(GREEN "\n\t\tInvalid error! rootsCount = %d" CLEANER, roots->rootsCount);
             break;
     }
 }

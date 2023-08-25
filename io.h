@@ -1,13 +1,8 @@
 #ifndef __IO__
 #define __IO__
 
-/// Set of possible scan states
-enum ScanReturn
-{
-    OK,         ///< all coefficients were calculated correctly
-    TERMINATE,  ///< the terminal has fallen off
-    UNCOR,      ///< incorrect input
-};
+#include "struct.h"
+
 
 /**
     \brief Function reads the coefficients of the quadratic equation

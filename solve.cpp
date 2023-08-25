@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include "solve.h"
+#include "struct.h"
 
 bool IsZero(double x)
 {
@@ -13,13 +14,16 @@ void FixZero(double* x)
 {
     assert(x);
 
-    if (IsZero(*x)){
+    if (IsZero(*x))
+    {
         *x = 0.0;
     }
 }
 
 double Discriminant(const struct Coeffs* coeffs)
 {
+    assert(coeffs);
+
     return coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c;
 }
 

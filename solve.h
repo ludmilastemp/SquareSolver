@@ -1,30 +1,6 @@
 #ifndef __SOLVE__
 #define __SOLVE__
 
-///Set of possible number of roots
-enum RootsCount
-{
-    ROOTS_ZERO,   ///< no roots
-    ROOTS_ONE,    ///< one root
-    ROOTS_TWO,    ///< two roots
-    ROOTS_INFINIK  //K  ///< root - any real number                         // naming...
-};
-
-///Structure combining the coefficients of a quadratic equation
-struct Coeffs
-{
-    double a;     ///< coefficients for the second degree of the unknown
-    double b;     ///< coefficient at the first degree of the unknown
-    double c;     ///< free coefficient
-};
-
-///Structure combining the roots of a quadratic equation
-struct Roots
-{
-    double x1, x2;            ///< roots of the quadratic equation
-    RootsCount rootsCount;   ///< number of roots of the quadratic equation
-};
-
 /**
     \brief Function checks the number for belonging to the epsilon neighborhood
     \param x pointer to number for comparison
