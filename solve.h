@@ -7,7 +7,7 @@ enum RootsCount
     ROOTS_ZERO,   ///< no roots
     ROOTS_ONE,    ///< one root
     ROOTS_TWO,    ///< two roots
-    ROOTS_INFINI  ///< root - any real number
+    ROOTS_INFINIK  //K  ///< root - any real number                         // naming...
 };
 
 ///Structure combining the coefficients of a quadratic equation
@@ -22,16 +22,32 @@ struct Coeffs
 struct Roots
 {
     double x1, x2;            ///< roots of the quadratic equation
-    RootsCount count_roots;   ///< number of roots of the quadratic equation
+    RootsCount rootsCount;   ///< number of roots of the quadratic equation
 };
+
+/**
+    \brief Function checks the number for belonging to the epsilon neighborhood
+    \param x pointer to number for comparison
+    \return void
+*/
+void FixZero(double* x);
 
 /**
     \brief Function compares a floating point number with zero
     \param x the number to compare
-    \return 0 - if the number is not close to zero
-        1 - if the number is close to zero
+    \return 1  - if the number is close to zero
+            0 - otherwise
 */
-bool CompareZero(double x);
+bool IsZero(double x);
+
+//double IsZero2(double x);
+
+/**
+    \brief Function considers the discriminant of the quadratic equation
+    \param coeffs pointer to the structure in which the coefficients of the quadratic equation are stored
+    \return discriminant of the quadratic equation
+*/
+double Discriminant(const struct Coeffs* coeffs);
 
 /**
     \brief Function solves a linear equation

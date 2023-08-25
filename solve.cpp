@@ -9,6 +9,20 @@ bool IsZero(double x)
     return fabs(x) < EPS;
 }
 
+void FixZero(double* x)
+{
+    assert(x);
+
+    if (IsZero(*x)){
+        *x = 0.0;
+    }
+}
+
+double Discriminant(const struct Coeffs* coeffs)
+{
+    return coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c;
+}
+
 void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots)
 {
     assert(coeffs);
@@ -20,45 +34,34 @@ void SolveQuadraticEquation(const struct Coeffs* coeffs, struct Roots* roots)
     }
     else
     {
-        double discrim = coeffs->b * coeffs->b - 4 * coeffs->a * coeffs->c; // function
-                    // = discriminant(coeffs);
+        double discrim = Discriminant(coeffs);
 
         if (IsZero(discrim))
         {
-            roots->count_roots = ROOTS_ONE;
+            roots->rootsCount = ROOTS_ONE;
 
             roots->x1 = -coeffs->b / (2 * coeffs->a);
-
-            if (IsZero(roots->x1))// copy-pasta konkretnaya
-            {
-                roots->x1 = fabs(roots->x1);// copy-pasta konkretnaya
-            }// copy-pasta konkretnaya
+            FixZero(&roots->x1);
 
             return;
         }
 
         if (discrim < 0)
         {
-            roots->count_roots = ROOTS_ZERO;
+            roots->rootsCount = ROOTS_ZERO;
 
             return;
         }
 
-        roots->count_roots = ROOTS_TWO;
+        roots->rootsCount = ROOTS_TWO;
 
         double sqrt_discrim = sqrt(discrim);
 
         roots->x1 = (-coeffs->b - sqrt_discrim) / (2 * coeffs->a);
         roots->x2 = (-coeffs->b + sqrt_discrim) / (2 * coeffs->a);
 
-        if (IsZero(roots->x1)) // copy-pasta konkretnaya
-        {
-            roots->x1 = fabs(roots->x1);// copy-pasta konkretnaya
-        }
-        if (IsZero(roots->x2))// copy-pasta konkretnaya
-        {
-            roots->x2 = fabs(roots->x2);// copy-pasta konkretnaya
-        }
+        FixZero(&roots->x1);
+        FixZero(&roots->x2);
     }
 }
 
@@ -71,22 +74,19 @@ void SolveLinearEquation(const struct Coeffs* coeffs, struct Roots* roots)
     {
         if (IsZero(coeffs->c))
         {
-            roots->count_roots = ROOTS_INFINI;
+            roots->rootsCount = ROOTS_INFINIK;
         }
         else
         {
-            roots->count_roots = ROOTS_ZERO;
+            roots->rootsCount = ROOTS_ZERO;
         }
     }
     else
     {
-        roots->count_roots = ROOTS_ONE;
+        roots->rootsCount = ROOTS_ONE;
+
         roots->x1 = - coeffs->c / coeffs->b;
-// copy-pasta konkretnaya
-        if (IsZero(roots->x1))// copy-pasta konkretnaya// copy-pasta konkretnaya
-        {// copy-pasta konkretnaya
-            roots->x1 = fabs(roots->x1);// copy-pasta konkretnaya
-        }// copy-pasta konkretnaya// copy-pasta konkretnaya// copy-pasta konkretnaya
-    }// copy-pasta konkretnaya
+        FixZero(&roots->x1);
+    }
 }
 

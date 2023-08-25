@@ -4,9 +4,9 @@
 /// Set of possible scan states
 enum ScanReturn
 {
-    OK,      ///< all coefficients were calculated correctly
-    TERMIN,  ///< the terminal has fallen off
-    UNCOR,   ///< incorrect input
+    OK,         ///< all coefficients were calculated correctly
+    TERMINATE,  ///< the terminal has fallen off
+    UNCOR,      ///< incorrect input
 };
 
 /**
