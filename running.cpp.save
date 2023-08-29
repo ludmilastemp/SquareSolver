@@ -1,12 +1,47 @@
 #include <stdio.h>
-#include <assert.h>                        //   G 9X2  5     S
-                                           //   G      5  1  S
-                                           //1 47     35 01 53 03 69 01 0A 01
-const int  
+#include <assert.h>
+                           
+#include "running.h"
+
+int main()
+{
+#ifdef WRITEBINTXT
+    FILE *fp = fopen("running.txt", "r");
+    assert(fp);
+
+    FILE *fpBinTxt = fopen("running_bintxt.txt", "w");
+    assert(fpBinTxt);
+
+    if(!TxtInBinTxt(fp, fpBinTxt)) printf("OK!");
+
+    return 0;
+#endif
+
+#ifdef WRITEBIN
+    FILE *fp = fopen("running.txt", "r");
+    assert(fp);
+
+    FILE *fpBin = fopen("running_bin.txt", "wb");
+    assert(fpBin);
+
+    if(!TxtInBin(fp, fpBin)) printf("OK!");
+
+    return 0;
+#endif
+
+#ifdef PRINTBIN
+    FILE *fpBin = fopen("running_bin.txt", "rb");
+    assert(fpBin);
+
+    BinInConsole(fpBin);
+
+    return 0;
+#endif
+}
 
 void BinInConsole(FILE* fp)
 {
-    int symbol = 0;
+    int symbol   = 0;
     int quantity = 0;
 
     while(true)
@@ -17,7 +52,7 @@ void BinInConsole(FILE* fp)
         {
             while (true)
             {
-                symbol = getc(fp);
+                symbol   = getc(fp);
                 quantity = getc(fp);
 
                 for(int i = 0; i < quantity; ++i)
@@ -26,7 +61,7 @@ void BinInConsole(FILE* fp)
                 }
 
                 if (symbol == EOF || quantity == EOF) break;
-                if (symbol == 10 || symbol == 13) break;
+                if (symbol == 10  || symbol == 13) break;
             }
         }
         else
@@ -49,8 +84,8 @@ int TxtInBin(FILE* fp, FILE* fpBin)
     int symbolTemp = 0;
     int symbolSameCount = 1;
 
-    int str[150] = { 0 };
-    int strBin[150] = { 0 };
+    int str[MAX_STRING_LENGTH] = { 0 };
+    int strBin[MAX_STRING_LENGTH] = { 0 };
 
     int toIndex = 0;
     int toIndexBin = 0;
@@ -135,8 +170,8 @@ int TxtInBinTxt(FILE* fp, FILE* fpBinTxt)
     int symbolTemp = 0;
     int symbolSameCount = 1;
 
-    int str[250] = { 0 };
-    int strBinTxt[250] = { 0 };
+    int str[MAX_STRING_LENGTH] = { 0 };
+    int strBinTxt[MAX_STRING_LENGTH] = { 0 };
 
     int toIndex = 0;
     int toIndexBinTxt = 0;
@@ -211,40 +246,4 @@ int TxtInBinTxt(FILE* fp, FILE* fpBinTxt)
     }
 
     return 0;
-}
-
-int main()
-{
-#ifdef WRITEBINTXT
-    FILE *fp = fopen("running.txt", "r");
-    assert(fp);
-
-    FILE *fpBinTxt = fopen("running_bintxt.txt", "w");
-    assert(fpBinTxt);
-
-    if(!TxtInBinTxt(fp, fpBinTxt)) printf("OK!");
-
-    return 0;
-#endif
-
-#ifdef WRITEBIN
-    FILE *fp = fopen("running.txt", "r");
-    assert(fp);
-
-    FILE *fpBin = fopen("running_bin.txt", "wb");
-    assert(fpBin);
-
-    if(!TxtInBin(fp, fpBin)) printf("OK!");
-
-    return 0;
-#endif
-
-#ifdef PRINTBIN
-    FILE *fpBin = fopen("running_bin.txt", "rb");
-    assert(fpBin);
-
-    BinInConsole(fpBin);
-
-    return 0;
-#endif
 }

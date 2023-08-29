@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "running.h"
-            //krya
+
 int main()
 {
 #ifdef WRITEBINTXT
@@ -41,7 +41,7 @@ int main()
 
 void BinInConsole(FILE* fp)
 {
-    int symbol = 0;
+    int symbol   = 0;
     int quantity = 0;
 
     while(true)
@@ -52,7 +52,7 @@ void BinInConsole(FILE* fp)
         {
             while (true)
             {
-                symbol = getc(fp);
+                symbol   = getc(fp);
                 quantity = getc(fp);
 
                 for(int i = 0; i < quantity; ++i)
@@ -61,7 +61,7 @@ void BinInConsole(FILE* fp)
                 }
 
                 if (symbol == EOF || quantity == EOF) break;
-                if (symbol == 10 || symbol == 13) break;
+                if (symbol == 10  || symbol == 13) break;
             }
         }
         else

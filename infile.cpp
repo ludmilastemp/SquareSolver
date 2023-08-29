@@ -5,8 +5,14 @@
 
 ScanReturn MyScan(FILE* fp, double* x)
 {
+    assert(fp);
+    assert(x);
+
     int restOfLine = getc(fp);
-    if (restOfLine == '\n') return SCAN_INCORRECT;
+    if (restOfLine == '\n')
+    {
+        return SCAN_INCORRECT;
+    }
     else ungetc(restOfLine, fp);
 
     if (fscanf(fp, "%lg", x) == 0)
@@ -52,7 +58,9 @@ ScanReturn MyScan(FILE* fp, double* x)
 
 ScanReturn FscanCoeffs(FILE* fp, struct Coeffs* coeffs, struct Roots* rootsRef)
 {
+    assert(fp);
     assert(coeffs);
+    assert(rootsRef);
 
     int nVarsEntered = 0;
 
@@ -92,7 +100,7 @@ ScanReturn FscanCoeffs(FILE* fp, struct Coeffs* coeffs, struct Roots* rootsRef)
 
         if (restOfLine == '\n')
         {
-            return SCAN_INCORRECT;
+            return SCAN_CORRECT;
         }
         else
         {
