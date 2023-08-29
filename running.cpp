@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "running.h"
-
+            //krya
 int main()
 {
 #ifdef WRITEBINTXT
